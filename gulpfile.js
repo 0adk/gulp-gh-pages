@@ -31,6 +31,7 @@ const gulp                      = require('gulp'),
       imagemin                  = require('gulp-imagemin'),
       browserSync               = require('browser-sync').create(),
       dependents                = require('gulp-dependents'),
+      var deploy                = require('gulp-gh-pages'),
 
       src_folder                = './src/',
       src_assets_folder         = src_folder + 'assets/',
@@ -144,6 +145,11 @@ gulp.task('watch', () => {
   gulp.watch(watch, gulp.series('dev')).on('change', browserSync.reload);
   gulp.watch(watchImages, gulp.series('images')).on('change', browserSync.reload);
   gulp.watch(watchVendor, gulp.series('vendor')).on('change', browserSync.reload);
+});
+
+gulp.task('deploy', function () {
+  return gulp.src("./dist/**/*")
+    .pipe(deploy())
 });
 
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
