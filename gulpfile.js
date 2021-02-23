@@ -18,6 +18,7 @@
  */
 
 const gulp                      = require('gulp'),
+      deploy                    = require('gulp-gh-pages'),
       del                       = require('del'),
       sourcemaps                = require('gulp-sourcemaps'),
       plumber                   = require('gulp-plumber'),
@@ -31,7 +32,6 @@ const gulp                      = require('gulp'),
       imagemin                  = require('gulp-imagemin'),
       browserSync               = require('browser-sync').create(),
       dependents                = require('gulp-dependents'),
-      var deploy                = require('gulp-gh-pages'),
 
       src_folder                = './src/',
       src_assets_folder         = src_folder + 'assets/',
@@ -147,9 +147,11 @@ gulp.task('watch', () => {
   gulp.watch(watchVendor, gulp.series('vendor')).on('change', browserSync.reload);
 });
 
+/**
+ * Push build to gh-pages
+ */
 gulp.task('deploy', function () {
   return gulp.src("./dist/**/*")
     .pipe(deploy())
 });
-
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
