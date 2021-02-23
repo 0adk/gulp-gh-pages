@@ -22,8 +22,6 @@ const gulp                      = require('gulp'),
       sourcemaps                = require('gulp-sourcemaps'),
       plumber                   = require('gulp-plumber'),
       sass                      = require('gulp-sass'),
-      less                      = require('gulp-less'),
-      stylus                    = require('gulp-stylus'),
       autoprefixer              = require('gulp-autoprefixer'),
       minifyCss                 = require('gulp-clean-css'),
       babel                     = require('gulp-babel'),
@@ -32,7 +30,6 @@ const gulp                      = require('gulp'),
       concat                    = require('gulp-concat'),
       imagemin                  = require('gulp-imagemin'),
       browserSync               = require('browser-sync').create(),
-      pug                       = require('gulp-pug'),
       dependents                = require('gulp-dependents'),
 
       src_folder                = './src/',
@@ -55,17 +52,6 @@ gulp.task('html', () => {
     .pipe(browserSync.stream());
 });
 
-gulp.task('pug', () => {
-  return gulp.src([ src_folder + 'pug/**/!(_)*.pug' ], {
-    base: src_folder + 'pug',
-    since: gulp.lastRun('pug')
-  })
-    .pipe(plumber())
-    .pipe(pug())
-    .pipe(gulp.dest(dist_folder))
-    .pipe(browserSync.stream());
-});
-
 gulp.task('sass', () => {
   return gulp.src([
     src_assets_folder + 'sass/**/*.sass',
@@ -75,30 +61,6 @@ gulp.task('sass', () => {
       .pipe(plumber())
       .pipe(dependents())
       .pipe(sass())
-      .pipe(autoprefixer())
-      .pipe(minifyCss())
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(dist_assets_folder + 'css'))
-    .pipe(browserSync.stream());
-});
-
-gulp.task('less', () => {
-  return gulp.src([ src_assets_folder + 'less/**/!(_)*.less'], { since: gulp.lastRun('less') })
-    .pipe(sourcemaps.init())
-      .pipe(plumber())
-      .pipe(less())
-      .pipe(autoprefixer())
-      .pipe(minifyCss())
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(dist_assets_folder + 'css'))
-    .pipe(browserSync.stream());
-});
-
-gulp.task('stylus', () => {
-  return gulp.src([ src_assets_folder + 'stylus/**/!(_)*.styl'], { since: gulp.lastRun('stylus') })
-    .pipe(sourcemaps.init())
-      .pipe(plumber())
-      .pipe(stylus())
       .pipe(autoprefixer())
       .pipe(minifyCss())
     .pipe(sourcemaps.write('.'))
@@ -147,9 +109,9 @@ gulp.task('vendor', () => {
     .pipe(browserSync.stream());
 });
 
-gulp.task('build', gulp.series('clear', 'html', 'pug', 'sass', 'less', 'stylus', 'js', 'images', 'vendor'));
+gulp.task('build', gulp.series('clear', 'html', 'sass', 'js', 'images', 'vendor'));
 
-gulp.task('dev', gulp.series('html', 'pug', 'sass', 'less', 'stylus', 'js'));
+gulp.task('dev', gulp.series('html', 'sass', 'js'));
 
 gulp.task('serve', () => {
   return browserSync.init({
@@ -174,11 +136,8 @@ gulp.task('watch', () => {
 
   const watch = [
     src_folder + '**/*.html',
-    src_folder + 'pug/**/*.pug',
     src_assets_folder + 'sass/**/*.sass',
     src_assets_folder + 'scss/**/*.scss',
-    src_assets_folder + 'less/**/*.less',
-    src_assets_folder + 'stylus/**/*.styl',
     src_assets_folder + 'js/**/*.js'
   ];
 
