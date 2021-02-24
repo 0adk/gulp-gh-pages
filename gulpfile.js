@@ -150,6 +150,6 @@ gulp.task('watch', () => {
 /**
  * Push build to gh-pages
  */
-gulp.task('deploy', () => src('./dist/**/*').pipe(ghPages()));
+gulp.task('deploy', () => gulp.src('./dist/**/*').pipe(ghPages()));
 
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
