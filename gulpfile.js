@@ -154,5 +154,12 @@ gulp.task('deploy', ['build'], function () {
   return gulp.src("./dist/**/*")
     .pipe(deploy())
 });
+/**
+ * Push build to gh-pages
+ */
+gulp.task('deploy', gulp.series('build', function() {
+  return gulp.src("./dist/**/*")
+  .pipe(deploy())
+}));
 
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
