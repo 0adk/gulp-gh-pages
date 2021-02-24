@@ -18,7 +18,7 @@
  */
 
 const gulp                      = require('gulp'),
-      ghPages                   = require('gulp-gh-pages'),
+      deploy                    = require('gulp-gh-pages'),
       del                       = require('del'),
       sourcemaps                = require('gulp-sourcemaps'),
       plumber                   = require('gulp-plumber'),
@@ -150,6 +150,9 @@ gulp.task('watch', () => {
 /**
  * Push build to gh-pages
  */
-gulp.task('deploy', () => gulp.src('./dist/**/*').pipe(ghPages()));
+gulp.task('deploy', ['build'], function () {
+  return gulp.src("./dist/**/*")
+    .pipe(deploy())
+});
 
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
