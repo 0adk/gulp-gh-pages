@@ -147,13 +147,7 @@ gulp.task('watch', () => {
   gulp.watch(watchVendor, gulp.series('vendor')).on('change', browserSync.reload);
 });
 
-/**
- * Push build to gh-pages
- */
-gulp.task('deploy', ['build'], function () {
-  return gulp.src("./dist/**/*")
-    .pipe(deploy())
-});
+
 /**
  * Push build to gh-pages
  */
