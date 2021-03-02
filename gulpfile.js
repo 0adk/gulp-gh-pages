@@ -18,7 +18,7 @@
  */
 
 const gulp                      = require('gulp'),
-      deploy                    = require("gulp-gh-pages");
+      ghPages                   = require('gulp-gh-pages');
       del                       = require('del'),
       sourcemaps                = require('gulp-sourcemaps'),
       plumber                   = require('gulp-plumber'),
@@ -41,11 +41,6 @@ const gulp                      = require('gulp'),
       dist_node_modules_folder  = dist_folder + 'node_modules/',
 
       node_dependencies         = Object.keys(require('./package.json').dependencies || {});
-
-var options = {
-      remoteUrl: "https://github.com/0adk/0adk.github.io.git",
-      branch: "main"
-    };
 
 gulp.task('clear', () => del([ dist_folder ]));
 
@@ -154,7 +149,7 @@ gulp.task('watch', () => {
 
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
 
-gulp.task('deploy', async function () {
-  gulp.src("dist/**/*.*")
-      .pipe(deploy(options));
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
 });
