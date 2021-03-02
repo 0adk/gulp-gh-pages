@@ -18,9 +18,8 @@
  */
 
 const gulp                      = require('gulp'),
+      deploy                    = require("gulp-gh-pages");
       del                       = require('del'),
-      run                       = require('gulp-run');
-      ghPages                   = require('gulp-gh-pages');
       sourcemaps                = require('gulp-sourcemaps'),
       plumber                   = require('gulp-plumber'),
       sass                      = require('gulp-sass'),
@@ -42,6 +41,11 @@ const gulp                      = require('gulp'),
       dist_node_modules_folder  = dist_folder + 'node_modules/',
 
       node_dependencies         = Object.keys(require('./package.json').dependencies || {});
+
+var options = {
+      remoteUrl: "https://github.com/0adk/0adk.github.io.git",
+      branch: "main"
+    };
 
 gulp.task('clear', () => del([ dist_folder ]));
 
@@ -148,27 +152,9 @@ gulp.task('watch', () => {
   gulp.watch(watchVendor, gulp.series('vendor')).on('change', browserSync.reload);
 });
 
-/*
-  deploying to github pages
-  statify is used to transform the site into static HTML in the dist directory
-  gh-pages is used to send result to github pages for this repo
-*/
-
-gulp.task('clean:static', function () {
-  return del([
-    'kirby/static/**/*'
-  ]);
-});
-
-// After cleaning, call your normal build tasks whatever they are.
-// Replace ('css', 'panel', etc)
-gulp.task('static', ['clean:static','css','panel','js','images','video'], function(){
-  return run('php ./kirby/statify.php').exec();
-})
-
-gulp.task('deploy', ['static'], function(){
-  return gulp.src('./kirby/static/**/*')
-   .pipe(ghPages());
-})
-
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
+
+gulp.task('deploy', function () {
+  gulp.src("dist/**/*.*")
+      .pipe(deploy(options));
+});

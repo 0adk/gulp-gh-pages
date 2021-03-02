@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
     }).catch(() => console.error('Random color could not be fetched.'));
   }
 
-  randomColor();
+  // randomColor();
 
   setInterval(randomColor, 8000);
 
