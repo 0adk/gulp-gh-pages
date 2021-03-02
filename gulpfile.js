@@ -154,7 +154,7 @@ gulp.task('watch', () => {
 
 gulp.task('default', gulp.series('build', gulp.parallel('serve', 'watch')));
 
-gulp.task('deploy', function () {
+gulp.task('deploy', async function () {
   gulp.src("dist/**/*.*")
       .pipe(deploy(options));
 });
